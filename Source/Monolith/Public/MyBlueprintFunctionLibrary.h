@@ -41,11 +41,44 @@ class MONOLITH_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 
 		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByCardType(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByCardNation(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByCardGuild(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByCardClass(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByGrade(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByATK(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByDEF(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByRange(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByMoveRange(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByArtist(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByRarity(TArray<FCard_Data_CPP> actors);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> sortByRuleText(TArray<FCard_Data_CPP> actors);
 	public:
 		UFUNCTION(BlueprintCallable, Category="SortList")
 		static TArray<FName> sortNames(TArray<FName> names);
 
 		UFUNCTION(BlueprintCallable, Category = "SortList")
-		static TArray<FCard_Data_CPP> sortBy(TArray<FCard_Data_CPP> actors, uint8 selectedSort);
+		static TArray<FCard_Data_CPP> sortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort);
 
 };

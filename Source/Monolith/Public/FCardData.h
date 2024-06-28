@@ -6,7 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "FCardData.generated.h"
 
-UENUM(BlueprintType, meta = (DisplayName = "Card Type"))
+UENUM(BlueprintType, meta = (DisplayName = "Card_Type"))
 enum class Card_Type : uint8 {
 	NONE,
 	RANGED,
@@ -17,7 +17,7 @@ enum class Card_Type : uint8 {
 	SUPPORT
 };
 
-UENUM(BlueprintType, meta = (DisplayName = "Card Nation"))
+UENUM(BlueprintType, meta = (DisplayName = "Card_Nation"))
 enum class Card_Nation : uint8 {
 	NONE,
 	MEMOREX,
@@ -29,7 +29,7 @@ enum class Card_Nation : uint8 {
 	CERULIA
 };
 
-UENUM(BlueprintType, meta = (DisplayName = "Card Rarity"))
+UENUM(BlueprintType, meta = (DisplayName = "Card_Rarity"))
 enum class Card_Rarity : uint8 {
 	COMMON,
 	RARE,
@@ -37,7 +37,7 @@ enum class Card_Rarity : uint8 {
 	ALTART
 };
 
-UENUM(BlueprintType, meta = (DisplayName = "Card Guild"))
+UENUM(BlueprintType, meta = (DisplayName = "Card_Guild"))
 enum class Card_Guild : uint8 {
 	NONE,
 	DIVINITY,
@@ -50,7 +50,7 @@ enum class Card_Guild : uint8 {
 	AUROREON
 };
 
-UENUM(BlueprintType, meta = (DisplayName = "Card Class"))
+UENUM(BlueprintType, meta = (DisplayName = "Card_Class"))
 enum class Card_Class : uint8 {
 	NONE,
 	RANGED,
@@ -61,7 +61,7 @@ enum class Card_Class : uint8 {
 	SUPPORT
 };
 
-UENUM(BlueprintType, meta = (DisplayName = "RangeType"))
+UENUM(BlueprintType, meta = (DisplayName = "Range_Type"))
 enum class Range_Type : uint8 {
 	NONE,
 	SQUARE,
@@ -72,6 +72,36 @@ enum class Range_Type : uint8 {
 	HORZBRICK,
 	DIAMOND,
 	MELEE
+};
+
+UENUM(BlueprintType, meta = (DisplayName = "Effect_Notifier"))
+enum class Effect_Notifier : uint8 {
+	ONEPT,
+	TWOPT,
+	HOPT,
+	AURA,
+	QUICKEFFECT,
+	ACT,
+	AUTO,
+	SELF,
+	CATALYST,
+	GLOBAL,
+	IGNITION
+};
+
+UENUM(BlueprintType, meta = (DisplayName = "Location_Notifier"))
+enum class Location_Notifier : uint8 {
+	FIELD,
+	HAND,
+	GRAVEYARD,
+	BANISHED,
+	FRONTLINE,
+	BACKLINE,
+	BASE,
+	LIFE,
+	ACTION,
+	ZOC,
+	CATALYST
 };
 
 /** Please add a struct description */
@@ -92,19 +122,19 @@ public:
 	FName Name;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Type", MakeStructureDefaultValue = "NewEnumerator0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Type", MakeStructureDefaultValue = "NONE"))
 	Card_Type CardType;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Nation", MakeStructureDefaultValue = "NewEnumerator0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Nation", MakeStructureDefaultValue = "NONE"))
 	Card_Nation CardNation;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Guild", MakeStructureDefaultValue = "NewEnumerator0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Guild", MakeStructureDefaultValue = "NONE"))
 	Card_Guild CardGuild;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Class", MakeStructureDefaultValue = "NewEnumerator0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Class", MakeStructureDefaultValue = "NONE"))
 	Card_Class CardClass;
 
 	/** Please add a variable description */
@@ -120,11 +150,11 @@ public:
 	int32 DEF;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Range", MakeStructureDefaultValue = "NewEnumerator0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Range", MakeStructureDefaultValue = "NONE"))
 	Range_Type Range;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "MoveRange", MakeStructureDefaultValue = "0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Move Range", MakeStructureDefaultValue = "0"))
 	uint8 MoveRange;
 
 	/** Please add a variable description */
@@ -132,14 +162,67 @@ public:
 	FText Artist;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Rarity", MakeStructureDefaultValue = "NewEnumerator0"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Rarity", MakeStructureDefaultValue = "COMMON"))
 	Card_Rarity Rarity;
 
 	/** Please add a variable description */
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "RuleText"))
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Rule Text"))
 	FText RuleText;
 
 	/** Please add a variable description */
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Image", MakeStructureDefaultValue = "None"))
 	TObjectPtr<UTexture2D> CardImage;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Effect 1"))
+	FText Effect1;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Effect 2"))
+	FText Effect2;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Effect 3"))
+	FText Effect3;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Notifier 1"))
+	TArray<Effect_Notifier> Notifier1;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Notifier 2"))
+	TArray<Effect_Notifier> Notifier2;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Notifier 3"))
+	TArray<Effect_Notifier> Notifier3;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Prompt 1"))
+	FText Prompt1;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Prompt 2"))
+	FText Prompt2;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Prompt 3"))
+	FText Prompt3;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Prompt 4"))
+	FText Prompt4;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Loc1", MakeStructureDefaultValue = "FIELD"))
+	TEnumAsByte<Location_Notifier> Loc1;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Loc2", MakeStructureDefaultValue = "FIELD"))
+	TEnumAsByte<Location_Notifier> Loc2;
+
+	/** Please add a variable description */
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Loc3", MakeStructureDefaultValue = "FIELD"))
+	TEnumAsByte<Location_Notifier> Loc3;
+
 };
