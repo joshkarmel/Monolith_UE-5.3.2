@@ -7,7 +7,7 @@ using namespace std;
 TArray<FName> UMyBlueprintFunctionLibrary::sortNames(TArray<FName> names)
 {
 	TArray<FString> strings;
-	for(FName name : names)
+	for (FName name : names)
 	{
 		strings.Push(name.ToString());
 	}
@@ -105,59 +105,166 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRuleText(TArray<FCard_
 	return cardData;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::SortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort)
 {
 	TArray<FCard_Data_CPP> sortedCards;
-	switch ((Sort_Types)selectedSort)
+	switch (static_cast<Sort_Types>(selectedSort))
 	{
-		case Sort_Types::SETCODE:
-			sortedCards = sortBySetCode(cards);
-			break;
-		case Sort_Types::NAME:
-			sortedCards = sortByName(cards);
-			break;
-		case Sort_Types::CARDTYPE:
-			sortedCards = sortByCardType(cards);
-			break;
-		case Sort_Types::CARDNATION:
-			sortedCards = sortByCardNation(cards);
-			break;
-		case Sort_Types::CARDGUILD:
-			sortedCards = sortByCardGuild(cards);
-			break;
-		case Sort_Types::CARDCLASS:
-			sortedCards = sortByCardClass(cards);
-			break;
-		case Sort_Types::GRADE:
-			sortedCards = sortByGrade(cards);
-			break;
-		case Sort_Types::ATK:
-			sortedCards = sortByATK(cards);
-			break;
-		case Sort_Types::DEF:
-			sortedCards = sortByDEF(cards);
-			break;
-		case Sort_Types::RANGE:
-			sortedCards = sortByRange(cards);
-			break;
-		case Sort_Types::MOVERANGE:
-			sortedCards = sortByMoveRange(cards);
-			break;
-		case Sort_Types::ARTIST:
-			sortedCards = sortByArtist(cards);
-			break;
-		case Sort_Types::RARITY:
-			sortedCards = sortByRarity(cards);
-			break;
-		case Sort_Types::RULETEXT:
-			sortedCards = sortByRuleText(cards);
-			break;
-		default:
-			sortedCards = sortByName(cards);
-			break;
+	case Sort_Types::SETCODE:
+		sortedCards = sortBySetCode(cards);
+		break;
+	case Sort_Types::NAME:
+		sortedCards = sortByName(cards);
+		break;
+	case Sort_Types::CARDTYPE:
+		sortedCards = sortByCardType(cards);
+		break;
+	case Sort_Types::CARDNATION:
+		sortedCards = sortByCardNation(cards);
+		break;
+	case Sort_Types::CARDGUILD:
+		sortedCards = sortByCardGuild(cards);
+		break;
+	case Sort_Types::CARDCLASS:
+		sortedCards = sortByCardClass(cards);
+		break;
+	case Sort_Types::GRADE:
+		sortedCards = sortByGrade(cards);
+		break;
+	case Sort_Types::ATK:
+		sortedCards = sortByATK(cards);
+		break;
+	case Sort_Types::DEF:
+		sortedCards = sortByDEF(cards);
+		break;
+	case Sort_Types::RANGE:
+		sortedCards = sortByRange(cards);
+		break;
+	case Sort_Types::MOVERANGE:
+		sortedCards = sortByMoveRange(cards);
+		break;
+	case Sort_Types::ARTIST:
+		sortedCards = sortByArtist(cards);
+		break;
+	case Sort_Types::RARITY:
+		sortedCards = sortByRarity(cards);
+		break;
+	case Sort_Types::RULETEXT:
+		sortedCards = sortByRuleText(cards);
+		break;
+	default:
+		sortedCards = sortByName(cards);
+		break;
 	}
 
 	return sortedCards;
+}
+
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Data_CPP> Cards,
+	FDeckBuilderFilter Filter)
+{
+	TArray<FCard_Data_CPP> FilteredCards = Cards;
+
+	if (Filter.NoFilter())
+	{
+		return Cards;
+	}
+
+	if (!Filter.ATK.IsEmpty())
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesAtk(Card.ATK);
+			});
+	}
+
+	if (!Filter.DEF.IsEmpty())
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesDef(Card.DEF);
+			});
+	}
+
+	if (!Filter.CardName.IsEmpty())
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesCardName(Card.Name.ToString());
+			});
+	}
+
+	if (Filter.CardType > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesCardType(Card.CardType);
+			});
+	}
+
+	if (Filter.CardClass > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesCardClass(Card.CardClass);
+			});
+	}
+
+	if (Filter.CardNation > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesCardNation(Card.CardNation);
+			});
+	}
+
+	if (Filter.CardRarity > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesCardRarity(Card.Rarity);
+			});
+	}
+
+	if (Filter.CardGuild > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesCardGuild(Card.CardGuild);
+			});
+	}
+
+	if (Filter.RangeType > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !Filter.MatchesRangeType(Card.Range);
+			});
+	}
+
+	if (Filter.LocationNotifier > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+
+				return !(Filter.MatchesLocationNotifier(Card.Loc1) ||
+					Filter.MatchesLocationNotifier(Card.Loc2) ||
+					Filter.MatchesLocationNotifier(Card.Loc3));
+			});
+	}
+
+	//if (Filter.EffectNotifier > 0)
+	//{
+	//	FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+	//		{
+
+	//			return !(Filter.MatchesEffectNotifier(Card.Notifier1) ||
+	//				Filter.MatchesEffectNotifier(Card.Notifier2) ||
+	//				Filter.MatchesEffectNotifier(Card.Notifier3));
+	//		});
+	//}
+
+	return FilteredCards;
 }
 
 

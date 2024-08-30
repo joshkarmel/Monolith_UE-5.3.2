@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "FCardData.h"
+#include "FDeckBuilderFilter.h"
 #include "MyBlueprintFunctionLibrary.generated.h"
 using namespace std;
 /**
@@ -79,6 +80,8 @@ class MONOLITH_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 		static TArray<FName> sortNames(TArray<FName> names);
 
 		UFUNCTION(BlueprintCallable, Category = "SortList")
-		static TArray<FCard_Data_CPP> sortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort);
+		static TArray<FCard_Data_CPP> SortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort);
 
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> FilterCards(TArray<FCard_Data_CPP> Cards, FDeckBuilderFilter Filter);
 };

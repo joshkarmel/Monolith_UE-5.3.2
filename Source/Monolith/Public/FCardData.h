@@ -8,13 +8,15 @@
 
 UENUM(BlueprintType, meta = (DisplayName = "Card_Type"))
 enum class Card_Type : uint8 {
-	NONE,
-	RANGED,
-	MELEE,
-	CAVALIER,
-	ARTILLARY,
-	ANTICAV,
-	SUPPORT
+	UNIT,
+	TOKEN,
+	MONOLITH,
+	SPELL,
+	CATALYST,
+	FIELDSPELL,
+	QUICKPLAY,
+	EQUIP,
+	BASESPELL
 };
 
 UENUM(BlueprintType, meta = (DisplayName = "Card_Nation"))
