@@ -1,159 +1,240 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyR notice in the Description page of Project Settings.
 
 #include "MyBlueprintFunctionLibrary.h"
 #include "FCardData.h"
 using namespace std;
 
-TArray<FName> UMyBlueprintFunctionLibrary::sortNames(TArray<FName> names)
+bool UMyBlueprintFunctionLibrary::compareName(FCard_Data_CPP a, FCard_Data_CPP b)
 {
-	TArray<FString> strings;
-	for (FName name : names)
-	{
-		strings.Push(name.ToString());
-	}
-	strings.Sort();
+	return a.Name.ToString() < b.Name.ToString();
+}
 
-	TArray<FName> sortedNames;
-	for (FString s : strings)
-	{
-		sortedNames.Push(FName(s));
-	}
-	return sortedNames;
+bool UMyBlueprintFunctionLibrary::compareDEF(FCard_Data_CPP a, FCard_Data_CPP b)
+{
+	return a.DEF == b.DEF ? compareName(a, b) : a.DEF < b.DEF;
+}
+
+bool UMyBlueprintFunctionLibrary::compareATK(FCard_Data_CPP a, FCard_Data_CPP b)
+{
+	return a.ATK == b.ATK ? compareDEF(a, b) : a.ATK < b.ATK;
+}
+
+bool UMyBlueprintFunctionLibrary::compareGrade(FCard_Data_CPP a, FCard_Data_CPP b)
+{
+	return a.Grade == b.Grade ? compareName(a, b) : a.Grade < b.Grade;
+}
+
+bool UMyBlueprintFunctionLibrary::compareCardType(FCard_Data_CPP a, FCard_Data_CPP b)
+{
+	return a.CardType == b.CardType ? compareATK(a, b) : a.CardType < b.CardType;
 }
 
 TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByName(TArray<FCard_Data_CPP> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.Name.ToString() < RHS.Name.ToString(); });
+	cardData.Sort([](const FCard_Data_CPP& L, const FCard_Data_CPP& R)
+		{ return compareName(L, R); });
 	return cardData;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortBySetCode(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortBySetCode(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.SetCode.ToString() < RHS.SetCode.ToString(); });
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].SetCode.ToString() < R.Cards[0].SetCode.ToString(); });
+	return mapSelectMany(cardData);
+}
+
+TMap<FName, FCardList> UMyBlueprintFunctionLibrary::sortByCardType(TMap<FName, FCardList> cardData)
+{
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return compareCardType(L.Cards[0], R.Cards[0]); });
 	return cardData;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardType(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardNation(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.CardType < RHS.CardType; });
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].CardNation < R.Cards[0].CardNation; });
+	return mapSelectMany(cardData);
+}
+
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardGuild(TMap<FName, FCardList> cardData)
+{
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].CardGuild < R.Cards[0].CardGuild; });
+	return mapSelectMany(cardData);
+}
+
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardClass(TMap<FName, FCardList> cardData)
+{
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].CardClass < R.Cards[0].CardClass; });
+	return mapSelectMany(cardData);
+}
+
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByGrade(TMap<FName, FCardList> cardData)
+{
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].Grade < R.Cards[0].Grade; });
+	return mapSelectMany(cardData);
+}
+
+TMap<FName, FCardList> UMyBlueprintFunctionLibrary::sortByATK(TMap<FName, FCardList> cardData)
+{
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return compareATK(L.Cards[0], R.Cards[0]); });
 	return cardData;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardNation(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByDEF(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.CardNation < RHS.CardNation; });
-	return cardData;
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].DEF < R.Cards[0].DEF; });
+	return mapSelectMany(cardData);
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardGuild(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRange(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.CardGuild < RHS.CardGuild; });
-	return cardData;
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].Range < R.Cards[0].Range; });
+	return mapSelectMany(cardData);
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByCardClass(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByMoveRange(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.CardClass < RHS.CardClass; });
-	return cardData;
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].MoveRange < R.Cards[0].MoveRange; });
+	return mapSelectMany(cardData);
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByGrade(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByArtist(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.Grade < RHS.Grade; });
-	return cardData;
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].Artist.ToString() < R.Cards[0].Artist.ToString(); });
+	return mapSelectMany(cardData);
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByATK(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRarity(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.ATK < RHS.ATK; });
-	return cardData;
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].Rarity < R.Cards[0].Rarity; });
+	return mapSelectMany(cardData);
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByDEF(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRuleText(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.DEF < RHS.DEF; });
-	return cardData;
+	cardData.ValueSort([](const FCardList& L, const FCardList& R)
+		{ return L.Cards[0].RuleText.ToString() < R.Cards[0].RuleText.ToString(); });
+	return mapSelectMany(cardData);
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRange(TArray<FCard_Data_CPP> cardData)
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::mapSelectMany(TMap<FName, FCardList> cardData)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.Range < RHS.Range; });
-	return cardData;
+	TArray<FCard_Data_CPP> sortedCards;
+	for (const TPair<FName, FCardList>& group : cardData)
+	{
+		for (const FCard_Data_CPP& card : group.Value.Cards)
+		{
+			sortedCards.Add(card);
+		}
+	}
+	return sortedCards;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByMoveRange(TArray<FCard_Data_CPP> cardData)
+TMap<FName, FCardList> UMyBlueprintFunctionLibrary::groupByName(TArray<FCard_Data_CPP> cards)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.MoveRange < RHS.MoveRange; });
-	return cardData;
+	TMap<FName, FCardList> groupedCards;
+	for (const FCard_Data_CPP& card : cards)
+	{
+		if(!groupedCards.Contains(card.Name))
+		{
+			groupedCards.Add(card.Name, FCardList());
+		}
+		groupedCards[card.Name].Cards.Add(card);
+	}
+	return groupedCards;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByArtist(TArray<FCard_Data_CPP> cardData)
+TMap<FName, FCardList> UMyBlueprintFunctionLibrary::groupByAtk(TArray<FCard_Data_CPP> cards)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.Artist.ToString() < RHS.Artist.ToString(); });
-	return cardData;
+	TMap<FName, FCardList> groupedCards;
+	for (const FCard_Data_CPP& card : cards)
+	{
+		if (!groupedCards.Contains(FName(FString::FromInt(card.ATK))))
+		{
+			groupedCards.Add(FName(FString::FromInt(card.ATK)), FCardList());
+		}
+		groupedCards[FName(FString::FromInt(card.ATK))].Cards.Add(card);
+	}
+	return groupedCards;
 }
 
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRarity(TArray<FCard_Data_CPP> cardData)
+TMap<FName, FCardList> UMyBlueprintFunctionLibrary::groupByCardType(TMap<FName, FCardList> groups)
 {
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.Rarity < RHS.Rarity; });
-	return cardData;
-}
-
-TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::sortByRuleText(TArray<FCard_Data_CPP> cardData)
-{
-	cardData.Sort([](const FCard_Data_CPP& LHS, const FCard_Data_CPP& RHS) { return LHS.RuleText.ToString() < RHS.RuleText.ToString(); });
-	return cardData;
+	TMap<FName, FCardList> groupedCards;
+	for (const TPair<FName, FCardList>& group : groups)
+	{
+		for (const FCard_Data_CPP& card : group.Value.Cards)
+		{
+			if (!groupedCards.Contains(FName(FString::FromInt(static_cast<uint8_t>(card.CardType)))))
+			{
+				groupedCards.Add(FName(FString::FromInt(static_cast<uint8_t>(card.CardType))), FCardList());
+			}
+			groupedCards[FName(FString::FromInt(static_cast<uint8_t>(card.CardType)))].Cards.Add(card);
+		}
+	}
+	return groupedCards;
 }
 
 TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::SortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort)
 {
+	const TMap<FName, FCardList> groupedCards = groupByName(cards);
 	TArray<FCard_Data_CPP> sortedCards;
 	switch (static_cast<Sort_Types>(selectedSort))
 	{
 	case Sort_Types::SETCODE:
-		sortedCards = sortBySetCode(cards);
+		sortedCards = sortBySetCode(groupedCards);
 		break;
 	case Sort_Types::NAME:
-		sortedCards = sortByName(cards);
+		sortedCards = sortByName(mapSelectMany(groupedCards));
 		break;
 	case Sort_Types::CARDTYPE:
-		sortedCards = sortByCardType(cards);
+		sortedCards = mapSelectMany(sortByCardType(groupedCards));
 		break;
 	case Sort_Types::CARDNATION:
-		sortedCards = sortByCardNation(cards);
+		sortedCards = sortByCardNation(groupedCards);
 		break;
 	case Sort_Types::CARDGUILD:
-		sortedCards = sortByCardGuild(cards);
+		sortedCards = sortByCardGuild(groupedCards);
 		break;
 	case Sort_Types::CARDCLASS:
-		sortedCards = sortByCardClass(cards);
+		sortedCards = sortByCardClass(groupedCards);
 		break;
 	case Sort_Types::GRADE:
-		sortedCards = sortByGrade(cards);
+		sortedCards = sortByGrade(groupedCards);
 		break;
 	case Sort_Types::ATK:
-		sortedCards = sortByATK(cards);
+		sortedCards = mapSelectMany(sortByATK(groupedCards));
 		break;
 	case Sort_Types::DEF:
-		sortedCards = sortByDEF(cards);
+		sortedCards = sortByDEF(groupedCards);
 		break;
 	case Sort_Types::RANGE:
-		sortedCards = sortByRange(cards);
+		sortedCards = sortByRange(groupedCards);
 		break;
 	case Sort_Types::MOVERANGE:
-		sortedCards = sortByMoveRange(cards);
+		sortedCards = sortByMoveRange(groupedCards);
 		break;
 	case Sort_Types::ARTIST:
-		sortedCards = sortByArtist(cards);
+		sortedCards = sortByArtist(groupedCards);
 		break;
 	case Sort_Types::RARITY:
-		sortedCards = sortByRarity(cards);
+		sortedCards = sortByRarity(groupedCards);
 		break;
 	case Sort_Types::RULETEXT:
-		sortedCards = sortByRuleText(cards);
+		sortedCards = sortByRuleText(groupedCards);
 		break;
 	default:
-		sortedCards = sortByName(cards);
+		sortedCards = sortByName(mapSelectMany(groupedCards));
 		break;
 	}
 
