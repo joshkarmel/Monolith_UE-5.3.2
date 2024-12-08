@@ -70,34 +70,34 @@ class MONOLITH_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 		UFUNCTION(Category = "SortList")
 		static TMap<FName, FCardList> groupByCardType(TMap<FName, FCardList> cards);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByName(TArray<FCard_Data_CPP> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortBySetCode(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TMap<FName, FCardList> sortByCardType(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByCardNation(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByCardGuild(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByCardClass(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByGrade(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TMap<FName, FCardList> sortByATK(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByDEF(TMap<FName, FCardList> actors);
 
-		UFUNCTION(Category = "SortList")
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByRange(TMap<FName, FCardList> actors);
 
 		UFUNCTION(Category = "SortList")

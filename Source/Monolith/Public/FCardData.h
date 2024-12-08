@@ -28,7 +28,8 @@ enum class Card_Nation : uint8 {
 	BRIGANTINE,
 	WASTELANDS,
 	LUNAS,
-	CERULIA
+	CERULIA,
+	VISTA_ISLES
 };
 
 UENUM(BlueprintType, meta = (DisplayName = "Card_Rarity"))
@@ -49,7 +50,10 @@ enum class Card_Guild : uint8 {
 	SYMBIOTIC,
 	UNDERDARK,
 	OCTANE,
-	AUROREON
+	AUROREON,
+	NORTH_KEEP,
+	HILLCREST
+
 };
 
 UENUM(BlueprintType, meta = (DisplayName = "Card_Class"))
@@ -93,6 +97,7 @@ enum class Effect_Notifier : uint8 {
 
 UENUM(BlueprintType, meta = (DisplayName = "Location_Notifier"))
 enum class Location_Notifier : uint8 {
+	NONE, 
 	FIELD,
 	HAND,
 	GRAVEYARD,
