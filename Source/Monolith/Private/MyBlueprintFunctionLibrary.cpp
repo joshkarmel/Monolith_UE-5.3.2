@@ -145,7 +145,7 @@ TMap<FName, FCardList> UMyBlueprintFunctionLibrary::groupByName(TArray<FCard_Dat
 	TMap<FName, FCardList> groupedCards;
 	for (const FCard_Data_CPP& card : cards)
 	{
-		if(!groupedCards.Contains(card.Name))
+		if (!groupedCards.Contains(card.Name))
 		{
 			groupedCards.Add(card.Name, FCardList());
 		}
@@ -246,9 +246,19 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Dat
 {
 	TArray<FCard_Data_CPP> FilteredCards = Cards;
 
+	FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+		{
+			if (Card.SetCode.ToString().Contains("TP"))
+			{
+				FText code = Card.SetCode;
+			}
+			return Card.SetCode.ToString().Contains("TP")
+				|| Card.CardType == Card_Type::TOKEN;
+		});
+
 	if (Filter.NoFilter())
 	{
-		return Cards;
+		return FilteredCards;
 	}
 
 	if (!Filter.ATK.IsEmpty())
