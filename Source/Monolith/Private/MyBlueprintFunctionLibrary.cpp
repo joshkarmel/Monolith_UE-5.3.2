@@ -358,4 +358,34 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Dat
 	return FilteredCards;
 }
 
+bool UMyBlueprintFunctionLibrary::DoesFileExist(FString FilePath, FString& OutInfoMsg)
+{
+	bool bFileExist = FPlatformFileManager::Get().GetPlatformFile().FileExists(*FilePath);
+	if (!bFileExist) OutInfoMsg = FString::Printf(TEXT("Error: No File found at: '%s'"), *FilePath);
+	return bFileExist;
+}
+
+void UMyBlueprintFunctionLibrary::LoadStringArrayFromFile(FString FilePath, bool& bOutSuccess, FString& OutInfoMsg, TArray<FString>& OutFileContents)
+{
+	bOutSuccess = FFileHelper::FFileHelper::LoadFileToStringArray(OutFileContents, *FilePath);
+	OutInfoMsg = (!bOutSuccess) ? FString::Printf(TEXT("Error in loading the file - Check reading permissions at '%s'"), *FilePath) : FString::Printf(TEXT("File content '%s' was succesfully loaded to array"), *FilePath);
+}
+
+bool UMyBlueprintFunctionLibrary::WriteStringToFile(FString FilePath, FString String, FString& OutInfoMsg)
+{
+	bool bSuccess = FFileHelper::SaveStringToFile(String, *FilePath);
+	OutInfoMsg = (!bSuccess) ? FString::Printf(TEXT("Check writing permissions and whether '%s' filePath is valid"), *FilePath) : FString::Printf(TEXT("File content '%s' was succesfully written"), *FilePath);
+	return bSuccess;
+}
+
+TArray<FString> UMyBlueprintFunctionLibrary::GetDirectoryFiles(bool& bOutSuccess)
+{
+	TArray<FString> Files;
+	FString FullPathFilename = TEXT("C:/Monolith/Deck/*");
+	//FString::Printf(*FullPathFilename);
+	IFileManager::Get().FindFiles(Files, *FullPathFilename, true, false);
+	
+	return Files;
+}
+
 

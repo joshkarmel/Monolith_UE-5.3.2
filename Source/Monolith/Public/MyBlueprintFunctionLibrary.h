@@ -6,7 +6,10 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "FCardData.h"
 #include "FDeckBuilderFilter.h"
+#include "HAL/PlatformFileManager.h"
+#include "HAL/FileManager.h"
 #include "MyBlueprintFunctionLibrary.generated.h"
+
 using namespace std;
 /**
  * 
@@ -117,4 +120,16 @@ class MONOLITH_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 
 		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> FilterCards(TArray<FCard_Data_CPP> Cards, FDeckBuilderFilter Filter);
+
+		UFUNCTION(BlueprintCallable)
+		static bool DoesFileExist(FString FilePath, FString& OutInfoMsg);
+
+		UFUNCTION(BlueprintCallable)
+		static void LoadStringArrayFromFile(FString FilePath, bool& bOutSuccess, FString& OutInfoMsg, TArray<FString>& OutFileContents);
+
+		UFUNCTION(BlueprintCallable)
+		static bool WriteStringToFile(FString FilePath, FString String, FString& OutInfoMsg);
+
+		UFUNCTION(BlueprintCallable)
+		static TArray<FString> GetDirectoryFiles(bool& bOutSuccess);
 };

@@ -52,7 +52,9 @@ enum class Card_Guild : uint8 {
 	OCTANE,
 	AUROREON,
 	NORTH_KEEP,
-	HILLCREST
+	HILLCREST,
+	PRISTINE_SHORES,
+	GRAVESEND
 
 };
 
@@ -92,7 +94,12 @@ enum class Effect_Notifier : uint8 {
 	SELF,
 	CATALYST,
 	GLOBAL,
-	IGNITION
+	IGNITION,
+	CHARGED,
+	TAP,
+	AUG1,
+	AUG2,
+	AUG3
 };
 
 UENUM(BlueprintType, meta = (DisplayName = "Location_Notifier"))
