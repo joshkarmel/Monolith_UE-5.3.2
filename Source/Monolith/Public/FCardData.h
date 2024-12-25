@@ -54,7 +54,9 @@ enum class Card_Guild : uint8 {
 	NORTH_KEEP,
 	HILLCREST,
 	PRISTINE_SHORES,
-	GRAVESEND
+	GRAVESEND,
+	VULCAS,
+	HAVNIS
 
 };
 
