@@ -185,6 +185,33 @@ TMap<FName, FCardList> UMyBlueprintFunctionLibrary::groupByCardType(TMap<FName, 
 	return groupedCards;
 }
 
+TMap<FName, FCardList> UMyBlueprintFunctionLibrary::groupCardsByCardType(TArray<FCard_Data_CPP> cards)
+{
+	TMap<FName, FCardList> groupedCards;
+	for (const FCard_Data_CPP& card : cards)
+	{
+		if (!groupedCards.Contains(FName(FString::FromInt(static_cast<uint8_t>(card.CardType)))))
+		{
+			groupedCards.Add(FName(FString::FromInt(static_cast<uint8_t>(card.CardType))), FCardList());
+		}
+		groupedCards[FName(FString::FromInt(static_cast<uint8_t>(card.CardType)))].Cards.Add(card);
+	}
+	return groupedCards;
+}
+
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::SortDeck(TArray<FCard_Data_CPP> cards)
+{
+	const TMap<FName, FCardList> groupedByCardType = sortByCardType(groupCardsByCardType(cards));
+	TMap<FName, FCardList> sortedDeckMap;
+
+	for (const TPair<FName, FCardList>& group : groupedByCardType)
+	{
+		sortedDeckMap.Add(group.Key, FCardList(sortByName(group.Value.Cards)));
+	}
+
+	return mapSelectMany(sortedDeckMap);
+}
+
 TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::SortBy(TArray<FCard_Data_CPP> cards, uint8 selectedSort)
 {
 	const TMap<FName, FCardList> groupedCards = groupByName(cards);
@@ -356,6 +383,25 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Dat
 	//}
 
 	return FilteredCards;
+}
+
+TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::ShuffleCards(TArray<FCard_Data_CPP> cards)
+{
+	TArray<FCard_Data_CPP> ShuffledCards = cards;
+	if (ShuffledCards.Num() > 0)
+	{
+		int32 LastIndex = ShuffledCards.Num() - 1;
+		for (int32 i = 0; i <= LastIndex; i++)
+		{
+			int32 Index = FMath::RandRange(i, LastIndex);
+			if (i != Index)
+			{
+				ShuffledCards.Swap(i, Index);
+			}
+		}
+	}
+
+	return ShuffledCards;
 }
 
 bool UMyBlueprintFunctionLibrary::DoesFileExist(FString FilePath, FString& OutInfoMsg)

@@ -37,6 +37,9 @@ struct FCardList
 {
 	GENERATED_BODY()
 public:
+	FCardList() {}
+	FCardList(TArray<FCard_Data_CPP> cards) : Cards(cards) {}
+
 	UPROPERTY()
 	TArray<FCard_Data_CPP> Cards;
 };
@@ -72,6 +75,9 @@ class MONOLITH_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 
 		UFUNCTION(Category = "SortList")
 		static TMap<FName, FCardList> groupByCardType(TMap<FName, FCardList> cards);
+
+		UFUNCTION(Category = "SortList")
+		static TMap<FName, FCardList> groupCardsByCardType(TArray<FCard_Data_CPP> cards);
 
 		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> sortByName(TArray<FCard_Data_CPP> actors);
@@ -119,7 +125,13 @@ class MONOLITH_API UMyBlueprintFunctionLibrary : public UBlueprintFunctionLibrar
 		static TArray<FCard_Data_CPP> SortBy(TArray<FCard_Data_CPP> Cards, uint8 selectedSort);
 
 		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> SortDeck(TArray<FCard_Data_CPP> Cards);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
 		static TArray<FCard_Data_CPP> FilterCards(TArray<FCard_Data_CPP> Cards, FDeckBuilderFilter Filter);
+
+		UFUNCTION(BlueprintCallable, Category = "SortList")
+		static TArray<FCard_Data_CPP> ShuffleCards(TArray<FCard_Data_CPP> Cards);
 
 		UFUNCTION(BlueprintCallable)
 		static bool DoesFileExist(FString FilePath, FString& OutInfoMsg);
