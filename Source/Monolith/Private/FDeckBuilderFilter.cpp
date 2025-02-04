@@ -17,6 +17,8 @@ bool FDeckBuilderFilter::NoFilter()
 	return ATK.IsEmpty() &&
 		DEF.IsEmpty() &&
 		CardName.IsEmpty() &&
+		EffectText.IsEmpty() &&
+		CardText.IsEmpty() &&
 		CardType <= 0 &&
 		CardNation <= 0 &&
 		CardRarity <= 0 &&
@@ -24,8 +26,7 @@ bool FDeckBuilderFilter::NoFilter()
 		CardClass <= 0 &&
 		RangeType <= 0 &&
 		EffectNotifier <= 0 &&
-		LocationNotifier <= 0 &&
-		EffectText.IsEmpty();
+		LocationNotifier <= 0;
 }
 
 bool FDeckBuilderFilter::MatchesAtk(int Atk)
@@ -41,6 +42,16 @@ bool FDeckBuilderFilter::MatchesDef(int Def)
 bool FDeckBuilderFilter::MatchesCardName(FString Name)
 {
 	return !CardName.IsEmpty() && Name.Contains(CardName);
+}
+
+bool FDeckBuilderFilter::MatchesEffectText(FString Text)
+{
+	return !EffectText.IsEmpty() && Text.Contains(EffectText);
+}
+
+bool FDeckBuilderFilter::MatchesCardText(FString Text)
+{
+	return !CardText.IsEmpty() && Text.Contains(CardText);
 }
 
 bool FDeckBuilderFilter::MatchesCardType(Card_Type Type)
@@ -83,7 +94,3 @@ bool FDeckBuilderFilter::MatchesLocationNotifier(Location_Notifier Location)
 	return LocationNotifier > 0 && Location == static_cast<Location_Notifier>(LocationNotifier - 1);
 }
 
-bool FDeckBuilderFilter::MatchesEffectText(FString CardText)
-{
-	return !EffectText.IsEmpty() && CardText.Contains(EffectText);
-}

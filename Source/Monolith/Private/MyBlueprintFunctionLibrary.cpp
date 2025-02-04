@@ -304,13 +304,34 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Dat
 			});
 	}
 
-	if (!Filter.CardName.IsEmpty())
+	if (!Filter.CardText.IsEmpty())
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !(Filter.MatchesCardText(Card.Name.ToString()) ||
+					Filter.MatchesCardText(Card.Effect1.ToString()) ||
+					Filter.MatchesCardText(Card.Effect2.ToString()) ||
+					Filter.MatchesCardText(Card.Effect3.ToString()));
+			});
+	}
+
+	/*if (!Filter.CardName.IsEmpty())
 	{
 		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
 			{
 				return !Filter.MatchesCardName(Card.Name.ToString());
 			});
-	}
+	}*/
+
+	/*if (!Filter.EffectText.IsEmpty())
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !(Filter.MatchesEffectText(Card.Effect1.ToString())
+					|| Filter.MatchesEffectText(Card.Effect2.ToString())
+					|| Filter.MatchesEffectText(Card.Effect3.ToString()));
+			});
+	}*/
 
 	if (Filter.CardType > 0)
 	{
@@ -370,27 +391,6 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Dat
 					Filter.MatchesLocationNotifier(Card.Loc3));
 			});
 	}
-
-	if (!Filter.EffectText.IsEmpty())
-	{
-		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
-			{
-				return !(Filter.MatchesEffectText(Card.Effect1.ToString())
-					|| Filter.MatchesEffectText(Card.Effect2.ToString())
-					|| Filter.MatchesEffectText(Card.Effect3.ToString()));
-			});
-	}
-
-	/*if (Filter.EffectNotifier > 0)
-	{
-		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
-			{
-
-				return !(Filter.MatchesEffectNotifier(Card.Notifier1) ||
-					Filter.MatchesEffectNotifier(Card.Notifier2) ||
-					Filter.MatchesEffectNotifier(Card.Notifier3));
-			});
-	}*/
 
 	return FilteredCards;
 }
