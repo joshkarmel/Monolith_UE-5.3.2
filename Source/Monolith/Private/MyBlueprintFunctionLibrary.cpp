@@ -371,16 +371,26 @@ TArray<FCard_Data_CPP> UMyBlueprintFunctionLibrary::FilterCards(TArray<FCard_Dat
 			});
 	}
 
-	//if (Filter.EffectNotifier > 0)
-	//{
-	//	FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
-	//		{
+	if (!Filter.EffectText.IsEmpty())
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+				return !(Filter.MatchesEffectText(Card.Effect1.ToString())
+					|| Filter.MatchesEffectText(Card.Effect2.ToString())
+					|| Filter.MatchesEffectText(Card.Effect3.ToString()));
+			});
+	}
 
-	//			return !(Filter.MatchesEffectNotifier(Card.Notifier1) ||
-	//				Filter.MatchesEffectNotifier(Card.Notifier2) ||
-	//				Filter.MatchesEffectNotifier(Card.Notifier3));
-	//		});
-	//}
+	/*if (Filter.EffectNotifier > 0)
+	{
+		FilteredCards.RemoveAll([&Filter](const FCard_Data_CPP& Card)
+			{
+
+				return !(Filter.MatchesEffectNotifier(Card.Notifier1) ||
+					Filter.MatchesEffectNotifier(Card.Notifier2) ||
+					Filter.MatchesEffectNotifier(Card.Notifier3));
+			});
+	}*/
 
 	return FilteredCards;
 }
@@ -430,7 +440,7 @@ TArray<FString> UMyBlueprintFunctionLibrary::GetDirectoryFiles(bool& bOutSuccess
 	FString FullPathFilename = TEXT("C:/Monolith/Deck/*");
 	//FString::Printf(*FullPathFilename);
 	IFileManager::Get().FindFiles(Files, *FullPathFilename, true, false);
-	
+
 	return Files;
 }
 

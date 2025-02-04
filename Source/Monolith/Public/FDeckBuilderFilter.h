@@ -28,6 +28,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Name"))
 	FString CardName;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Effect Text"))
+	FString EffectText;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (DisplayName = "Card Type"))
 	int CardType;
 
@@ -64,4 +67,5 @@ public:
 	bool MatchesRangeType(Range_Type Nation);
 	bool MatchesEffectNotifier(Effect_Notifier Nation);
 	bool MatchesLocationNotifier(Location_Notifier Nation);
+	bool MatchesEffectText(FString Text);
 };

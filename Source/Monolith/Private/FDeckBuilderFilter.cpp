@@ -24,7 +24,8 @@ bool FDeckBuilderFilter::NoFilter()
 		CardClass <= 0 &&
 		RangeType <= 0 &&
 		EffectNotifier <= 0 &&
-		LocationNotifier <= 0;
+		LocationNotifier <= 0 &&
+		EffectText.IsEmpty();
 }
 
 bool FDeckBuilderFilter::MatchesAtk(int Atk)
@@ -80,4 +81,9 @@ bool FDeckBuilderFilter::MatchesEffectNotifier(Effect_Notifier Effect)
 bool FDeckBuilderFilter::MatchesLocationNotifier(Location_Notifier Location)
 {
 	return LocationNotifier > 0 && Location == static_cast<Location_Notifier>(LocationNotifier - 1);
+}
+
+bool FDeckBuilderFilter::MatchesEffectText(FString CardText)
+{
+	return !EffectText.IsEmpty() && CardText.Contains(EffectText);
 }
